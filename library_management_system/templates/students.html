@@ -1,0 +1,79 @@
+
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+
+{% block content %}
+
+<section class="form-panel" style="max-width: 600px; margin: 30px auto; padding: 30px;">
+
+    <h1 style="text-align: center;">Register a student</h1>
+
+    <form method="POST" class="book-form">
+
+        <label>Student name</label>
+        <input name="name" required>
+
+        <label>Department</label>
+        <input name="department" required>
+
+        <label>Email</label>
+        <input type="email" name="email" required>
+
+        <button class="button" type="submit" style="width: 100%;">
+            Add student
+        </button>
+
+    </form>
+
+</section>
+
+<section class="panel">
+
+    <h2 style="text-align: center;">Registered students</h2>
+
+    {% if students %}
+
+    <div class="table-wrap">
+
+        <table style="width: 100%; text-align: center;">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for student in students %}
+
+                <tr>
+                    <td>{{ student.student_id }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.department }}</td>
+                    <td>{{ student.email }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <p class="muted" style="text-align: center;">
+        No students registered yet.
+    </p>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}
+

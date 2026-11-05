@@ -1,0 +1,83 @@
+
+{% extends "base.html" %}
+{% block title %}Issue Records{% endblock %}
+
+{% block content %}
+
+<section class="panel">
+
+    <h1 style="text-align: center;">Issue and return records</h1>
+
+    {% if records %}
+
+    <div class="table-wrap">
+
+        <table style="width: 100%; text-align: center;">
+
+            <thead>
+                <tr>
+                    <th>Issue ID</th>
+                    <th>Book</th>
+                    <th>Student</th>
+                    <th>Department</th>
+                    <th>Issue date</th>
+                    <th>Return date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for record in records %}
+
+                <tr>
+                    <td>{{ record.issue_id }}</td>
+                    <td>{{ record.title }}</td>
+                    <td>{{ record.name }}</td>
+                    <td>{{ record.department }}</td>
+                    <td>{{ record.issue_date }}</td>
+                    <td>{{ record.return_date or "—" }}</td>
+                    <td>{{ record.status }}</td>
+
+                    <td>
+
+                        {% if record.status == "Issued" %}
+
+                        <form method="POST"
+                              action="{{ url_for('return_issued_book', issue_id=record.issue_id) }}">
+
+                            <button class="button secondary" type="submit">
+                                Return
+                            </button>
+
+                        </form>
+
+                        {% else %}
+
+                        Returned
+
+                        {% endif %}
+
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <p class="muted" style="text-align: center;">
+        No issue records available.
+    </p>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

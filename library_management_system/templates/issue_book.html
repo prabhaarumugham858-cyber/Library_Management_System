@@ -1,0 +1,67 @@
+
+{% extends "base.html" %}
+{% block title %}Issue Book{% endblock %}
+
+{% block content %}
+
+<section class="form-panel" style="max-width: 600px; margin: 40px auto; padding: 30px;">
+
+    <h1 style="text-align: center;">Issue a book</h1>
+
+    <p class="muted" style="text-align: center; margin-bottom: 25px;">
+        Choose a student and an available book.
+    </p>
+
+    {% if books and students %}
+
+    <form method="POST" class="book-form">
+
+        <label>Book</label>
+
+        <select name="book_id" required style="width: 100%;">
+
+            {% for book in books %}
+
+                {% if book.available > 0 %}
+
+                <option value="{{ book.book_id }}">
+                    {{ book.title }} ({{ book.available }} available)
+                </option>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </select>
+
+        <label>Student</label>
+
+        <select name="student_id" required style="width: 100%;">
+
+            {% for student in students %}
+
+            <option value="{{ student.student_id }}">
+                {{ student.name }} – {{ student.department }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <button class="button" type="submit" style="width: 100%; margin-top: 15px;">
+            Confirm issue
+        </button>
+
+    </form>
+
+    {% else %}
+
+    <p class="muted" style="text-align: center;">
+        Add at least one available book and register a student first.
+    </p>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

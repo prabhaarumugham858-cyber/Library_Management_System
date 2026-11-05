@@ -1,0 +1,134 @@
+
+{% extends "base.html" %}
+{% block title %}Library Dashboard{% endblock %}
+{% block content %}
+
+<section class="welcome" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+    <div>
+        <p class="eyebrow">LIBRARY OVERVIEW</p>
+        <h1>Welcome to your library</h1>
+        <p class="muted">Manage books, students and borrowing activity.</p>
+    </div>
+
+    <a class="button" href="{{ url_for('add_book') }}">+ Add a book</a>
+</section>
+
+<section class="stats" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 25px 0;">
+
+    <div class="stat-card">
+        <span>Book titles</span>
+        <strong>{{ summary.titles }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>Total copies</span>
+        <strong>{{ summary.copies }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>Available copies</span>
+        <strong>{{ summary.available }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>Registered students</span>
+        <strong>{{ summary.students }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>Currently issued</span>
+        <strong>{{ summary.issued }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>Returned records</span>
+        <strong>{{ summary.returned }}</strong>
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <div class="section-heading" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+
+        <div>
+            <h2>Book collection</h2>
+            <p class="muted">Search and manage books.</p>
+        </div>
+
+        <form class="search-form" action="{{ url_for('view_books') }}" method="GET" style="display: flex; gap: 10px;">
+
+            <input type="search"
+                   name="q"
+                   placeholder="Title, author or category"
+                   value="{{ query }}">
+
+            <button class="button secondary" type="submit">Search</button>
+
+        </form>
+
+    </div>
+
+    {% if books %}
+
+    <div class="table-wrap">
+
+        <table style="width: 100%;">
+
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th>Total</th>
+                    <th>Available</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for book in books %}
+
+                <tr>
+                    <td><strong>{{ book.title }}</strong></td>
+                    <td>{{ book.author }}</td>
+                    <td><span class="tag">{{ book.category }}</span></td>
+                    <td>{{ book.quantity }}</td>
+                    <td>{{ book.available }}</td>
+
+                    <td class="actions">
+
+                        <a href="{{ url_for('edit_book', book_id=book.book_id) }}">Edit</a>
+
+                        <form method="POST"
+                              action="{{ url_for('delete_book', book_id=book.book_id) }}"
+                              onsubmit="return confirm('Delete this book?');">
+
+                            <button class="link-danger" type="submit">Delete</button>
+
+                        </form>
+
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+        <h3>No books found</h3>
+        <p>Add a book or try a different search.</p>
+    </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}
